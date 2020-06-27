@@ -1,18 +1,18 @@
-from flask import render_template, flash, request, redirect, url_for
+from flask import render_template, flash, redirect, url_for
 from flask_login import login_user, logout_user, login_required
 
-from app import app, db
-from app.models.forms import LoginForm
-from app.models.forms import RegisterForm
-from app.models.tables import User
-import pdb
+from app import db
+from app.forms.forms import LoginForm
+from app.forms.forms import RegisterForm
+from app.models.auth import User
 
-@app.route("/")
+
 @login_required
 def index():
-    return render_template('index.html')
+    users = User.query.all()
+    return render_template('index.html', users=users)
 
-@app.route('/register', methods=['GET', 'POST'])
+
 def register():
     form = RegisterForm()
     username = form.username.data
@@ -32,7 +32,7 @@ def register():
     else:
         return render_template('register.html', form=form)
 
-@app.route("/login", methods=["GET", "POST"])
+
 def login():
     form = LoginForm()
     username = form.username.data
@@ -43,15 +43,15 @@ def login():
         
         if user and user.verify_password(password):
             login_user(user)
-            flash("User logged-in!")
+            flash("User logged-in!", 'info')
         else:
-            flash("Invalid login!")
+            flash("Username or password wrong!", 'warning')
     else:
         print(form.errors)
 
     return render_template('login.html', form=form)
 
-@app.route('/logout')
+
 def logout():
     logout_user()
     return redirect(url_for('login'))

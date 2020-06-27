@@ -4,4 +4,7 @@
 
 {% block content %}
      Toilter
+     {% for user in users %}
+          {{ user.name }}
+     {% endfor %}
 {% endblock %}

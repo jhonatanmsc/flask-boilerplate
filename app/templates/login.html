@@ -1,38 +1,22 @@
 {% extends 'base.html' %}
 
+{% from 'bootstrap/form.html' import render_field %}
+{% from 'bootstrap/utils.html' import render_messages %}
+
 {% block title %}Login{% endblock %}
 
 {% block content %}
     <div class="col-md-6 offset-md-4 mt-5">
+
+        {{ render_messages() }}
+
         <h2>Login</h2>
+
         <form action="" method="POST">
             {{ form.csrf_token }}
-            <div class="form-group">
-                <label>Username</label>
-                {{ form.username(_class="form-control", placeholder="your username")}}
-                {% if form.errors.username %}
-                <div class="alert alert-danger" role="alert">
-                    <ul>
-                    {% for error in form.errors.username %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                {{form.password(_class="form-control")}}
-                {% if form.errors.password %}
-                <div class="alert alert-danger" role="alert">
-                    <ul>
-                    {% for error in form.errors.password %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
+            {{ render_field(form.username) }}
+            {{ render_field(form.password) }}
+
             <div class="checkbox">
                 <label>
                     {{ form.remember_me }} Remember me
@@ -40,16 +24,6 @@
             </div>
             <button type="submit" class="btn btn-primary">Login!</button>
         </form>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-warning">
-                    <ul class=flashes>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
-        {% endwith %}
+
     </div>
 {% endblock %}
